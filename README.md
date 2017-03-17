@@ -109,6 +109,7 @@ export default SimpleForm
 * onSelect
 * onEnterKeyDown
 * options
+* renderInlineStyles
 * autoFocus
 * inputName
 * inputId
@@ -179,6 +180,13 @@ Default: `false`
 You can enable/disable Airbnb style soft autocomplete in the input field.
 (NOTE: This feature is experimental and not supported in mobile browsers)
 
+#### renderInlineStyles
+Type: `Boolean`
+Required: `false`
+Default: `true`
+
+Enable/disable render inline styles
+
 #### classNames
 Type: `Object`,
 Required: `false`
@@ -192,7 +200,9 @@ render() {
   const cssClasses = {
     root: 'form-group',
     input: 'form-control',
-    autocompleteContainer: 'my-autocomplete-container'
+    autocompleteContainer: 'my-autocomplete-container',
+    autocompleteItem: 'my-autocomplete-item',
+    autocompleteItemActive: 'my-autocomplete-item--active'
   }
 
   return (

@@ -167,28 +167,35 @@ class PlacesAutocompleteBasic extends Component {
 
   renderAutocomplete() {
     const { autocompleteItems } = this.state
-    const { styles } = this.props
+    const { styles, renderInlineStyles } = this.props
     if (autocompleteItems.length === 0) { return null }
     return (
       <div
         id="PlacesAutocomplete__autocomplete-container"
         className={this.props.classNames.autocompleteContainer || ''}
-        style={{ ...defaultStyles.autocompleteContainer, ...styles.autocompleteContainer }}>
-        {autocompleteItems.map((p, idx) => (
-          <div
-            key={p.placeId}
-            onMouseOver={() => this.setActiveItemAtIndex(p.index)}
-            onMouseDown={() => this.selectAddress(p.suggestion, p.placeId)}
-            style={{ ...defaultStyles.autocompleteItem, ...styles.autocompleteItem, ...this.autocompleteItemStyle(p.active) }}>
-            {this.props.autocompleteItem({ suggestion: p.suggestion, formattedSuggestion: p.formattedSuggestion })}
-          </div>
-        ))}
+        style={renderInlineStyles? { ...defaultStyles.autocompleteContainer, ...styles.autocompleteContainer } : {}}>
+        {autocompleteItems.map((p, idx) => {
+            const classNames = [this.props.classNames.autocompleteItem || ''];
+            if (p.active) {
+                classNames.push(this.props.classNames.autocompleteItemActive || '');
+            }
+            return (
+                <div
+                  key={p.placeId}
+                  className={classNames.join(' ')}
+                  onMouseOver={() => this.setActiveItemAtIndex(p.index)}
+                  onMouseDown={() => this.selectAddress(p.suggestion, p.placeId)}
+                  style={renderInlineStyles ? { ...defaultStyles.autocompleteItem, ...styles.autocompleteItem, ...this.autocompleteItemStyle(p.active) }: {}}>
+                  {this.props.autocompleteItem(p)}
+                </div>
+            );
+        })}
       </div>
     )
   }
 
   renderInput() {
-    const { classNames, placeholder, styles, value, autoFocus, inputName, inputId } = this.props
+    const { classNames, placeholder, styles, value, autoFocus, inputName, inputId, renderInlineStyles } = this.props
     return (
       <input
         type="text"
@@ -198,7 +205,7 @@ class PlacesAutocompleteBasic extends Component {
         onChange={this.handleInputChange}
         onKeyDown={this.handleInputKeyDown}
         onBlur={() => this.clearAutocomplete()}
-        style={styles.input}
+        style={renderInlineStyles ? styles.input : {}}
         autoFocus={autoFocus}
         name={inputName || ''}
         id={inputId || ''}
@@ -207,10 +214,10 @@ class PlacesAutocompleteBasic extends Component {
   }
 
   render() {
-    const { classNames, styles } = this.props
+    const { classNames, styles, renderInlineStyles } = this.props
     return (
       <div
-        style={{ ...defaultStyles.root, ...styles.root }}
+        style={renderInlineStyles ? { ...defaultStyles.root, ...styles.root } : {}}
         className={classNames.root || ''}>
         {this.renderInput()}
         {this.renderAutocomplete()}
